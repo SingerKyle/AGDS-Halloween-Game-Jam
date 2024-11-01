@@ -23,7 +23,7 @@
 *.lai
 *.la
 *.a
-*.lib
+.lib
 
 # Executables
 *.exe
@@ -47,10 +47,24 @@ SourceArt/**/*.tga
 
 # Binary Files
 Binaries/*
-Plugins/**/Binaries/*
+Plugins/*/Binaries/*
+
+/Content/StarterContent
 
 # Builds
 Build/*
+
+# Misc
+.idea/
+.vsconfig/
+.vsconfig/
+.vscode/
+
+Config/DefaultEngine.ini
+.vsconfig
+
+*.user
+LightTheWaves.sln.DotSettings.user
 
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
 !Build/*/
@@ -68,7 +82,9 @@ Saved/*
 
 # Compiled source files for the engine to use
 Intermediate/*
-Plugins/**/Intermediate/*
+Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+Config/DefaultEngine.ini
+Config/DefaultEngine.ini
