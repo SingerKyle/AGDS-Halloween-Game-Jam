@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PumpkinGameModeBase.h"
+
 #include <Kismet/GameplayStatics.h>
-#include <Net/UnrealNetwork.h>
 #include "GameFramework/Pawn.h"
 
 APumpkinGameModeBase::APumpkinGameModeBase()
@@ -26,9 +26,7 @@ void APumpkinGameModeBase::BeginPlay()
 
     SwitchTurn();
 }
-/// <summary>
-/// Switch Player Turns
-/// </summary>
+
 void APumpkinGameModeBase::SwitchTurn()
 {
     // Switch Current Game State
@@ -47,23 +45,4 @@ void APumpkinGameModeBase::SwitchTurn()
 
         break;
     }
-
-    OnRep_CurrentGameState();
-}
-
-void APumpkinGameModeBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-    DOREPLIFETIME(APumpkinGameModeBase, Player1);
-    DOREPLIFETIME(APumpkinGameModeBase, Player2);
-    DOREPLIFETIME(APumpkinGameModeBase, CurrentGameState);
-}
-
-void APumpkinGameModeBase::OnRep_CurrentGameState()
-{
-    // Log the current turn
-    UE_LOG(LogTemp, Log, TEXT("It is: %s"), *UEnum::GetDisplayValueAsText(CurrentGameState).ToString());
-
-
 }
