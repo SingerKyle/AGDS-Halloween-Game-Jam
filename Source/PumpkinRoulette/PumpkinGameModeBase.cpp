@@ -4,10 +4,13 @@
 
 #include "PumpkinPlayerInterface.h"
 #include "GameFramework/Pawn.h"
+#include "PumpkinHealthComponent.h"
 
 APumpkinGameModeBase::APumpkinGameModeBase()
 {
     CurrentGameState = EGameStates::Player1Turn;
+
+	DefaultDamageValue = -1;
 }
 
 void APumpkinGameModeBase::BeginPlay()
@@ -37,9 +40,17 @@ void APumpkinGameModeBase::SwitchTurn()
 
 void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool bLiveBullet)
 {
+	if(!HitPawn)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hitpawn not valid"));
+		return;
+	}
+
 	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, "BulletFired");
 	UE_LOG(LogTemp, Warning, TEXT("BulletFired"));
 	
+	// if bullet is live then deal damage
+
 	if (HoldingPawn == HitPawn)
 	{
 		if (!bLiveBullet)
@@ -47,6 +58,16 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 			// @TODO (Denis): Might need to reset turn here
 			return;
 		}
+	
+	}
+
+	// Apply Damage is live bullet
+	if (bLiveBullet)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Dealing %d damage") , DefaultDamageValue);
+		// apply damage to player
+		UPumpkinHealthComponent* HitPawnHealthComponent = Cast<UPumpkinHealthComponent>(HitPawn->FindComponentByClass<UPumpkinHealthComponent>());
+		HitPawnHealthComponent->AdjustHealth(DefaultDamageValue); // take 1 health off
 	}
 
 	SwitchTurn();

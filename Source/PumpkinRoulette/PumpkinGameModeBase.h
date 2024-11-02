@@ -47,6 +47,8 @@ protected:
 	UPROPERTY()
 	int32 LastPlayerIndex = 0;
 
+	UPROPERTY() int DefaultDamageValue;
+
 	// Current game state
 	UPROPERTY(BlueprintReadOnly, Category = "Game State") EGameStates CurrentGameState;
 };
