@@ -2,7 +2,7 @@
 
 #include "PumpkinGameModeBase.h"
 
-#include <Kismet/GameplayStatics.h>
+#include "PumpkinPlayerInterface.h"
 #include "GameFramework/Pawn.h"
 
 APumpkinGameModeBase::APumpkinGameModeBase()
@@ -13,18 +13,6 @@ APumpkinGameModeBase::APumpkinGameModeBase()
 void APumpkinGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
-
-    // Cast to player characters
-    TArray<AActor*> PlayerActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), APawn::StaticClass(), PlayerActors);
-
-    if (PlayerActors.Num() >= 2)
-    {
-        Player1 = Cast<APawn>(PlayerActors[0]);
-        Player2 = Cast<APawn>(PlayerActors[1]);
-    }
-
-    SwitchTurn();
 }
 
 void APumpkinGameModeBase::SwitchTurn()
@@ -45,4 +33,36 @@ void APumpkinGameModeBase::SwitchTurn()
 
         break;
     }
+}
+
+void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool bLiveBullet)
+{
+	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, "BulletFired");
+	UE_LOG(LogTemp, Warning, TEXT("BulletFired"));
+	
+	if (HoldingPawn == HitPawn)
+	{
+		if (!bLiveBullet)
+		{
+			// @TODO (Denis): Might need to reset turn here
+			return;
+		}
+	}
+
+	SwitchTurn();
+}
+
+bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
+{
+	if (CurrentGameState == EGameStates::Player1Turn)
+	{
+		return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 1;
+	}
+
+	return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 2;
+}
+
+int32 APumpkinGameModeBase::RequestPlayerIndex()
+{
+	return ++LastPlayerIndex;
 }

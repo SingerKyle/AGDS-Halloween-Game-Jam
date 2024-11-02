@@ -9,8 +9,9 @@
 UENUM(BlueprintType)
 enum class EGameStates : uint8
 {
-	Player1Turn		UMETA(DisplayName = "Player 1's Turn"),
-	Player2Turn		UMETA(DisplayName = "Player 2's Turn")
+	None = 0,
+	Player1Turn = 1		UMETA(DisplayName = "Player 1's Turn"),
+	Player2Turn = 2		UMETA(DisplayName = "Player 2's Turn")
 };
 
 /**
@@ -31,13 +32,20 @@ public:
 	/// </summary>
 	void SwitchTurn();
 
+	void BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool bLiveBullet);
+
+	bool CanFire(APawn* HoldingPawn) const;
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	int32 RequestPlayerIndex();
+	
 	// Getter for the current game state
 	EGameStates GetCurrentGameState() const { return CurrentGameState; }
 
 protected:
-	// variables for both players
-	UPROPERTY(BlueprintReadOnly, Category = "Players") APawn* Player1;
-	UPROPERTY(BlueprintReadOnly, Category = "Players") APawn* Player2;
+
+	UPROPERTY()
+	int32 LastPlayerIndex = 0;
 
 	// Current game state
 	UPROPERTY(BlueprintReadOnly, Category = "Game State") EGameStates CurrentGameState;
