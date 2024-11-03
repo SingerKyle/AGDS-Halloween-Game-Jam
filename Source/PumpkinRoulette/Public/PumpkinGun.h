@@ -32,6 +32,8 @@ public:
 	void FireBullet();
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	FORCEINLINE bool GetNextBullet() { return Bullets[1].bLiveBullet; };
 	
 protected:
 	// Called when the game starts or when spawned
