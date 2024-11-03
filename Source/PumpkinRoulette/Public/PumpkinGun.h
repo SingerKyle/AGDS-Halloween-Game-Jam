@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Grippables/GrippableActor.h"
 #include "PumpkinGun.generated.h"
 
 // @NOTE (Denis): This might not be required, but it could come in handy in the future
@@ -17,13 +17,13 @@ struct FBulletData
 };
 
 UCLASS()
-class PUMPKINROULETTE_API APumpkinGun : public AActor
+class PUMPKINROULETTE_API APumpkinGun : public AGrippableActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APumpkinGun();
+	APumpkinGun(const FObjectInitializer& ObjectInitializer);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
