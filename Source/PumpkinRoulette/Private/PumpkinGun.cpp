@@ -134,7 +134,14 @@ void APumpkinGun::OnRep_BulletData()
 
 void APumpkinGun::NetMulticastBulletFired_Implementation(bool bLiveBullet)
 {
-	UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
+	if (bLiveBullet)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
+	}
+	if (!bLiveBullet)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, GunFireSoundBlank, GetActorLocation());
+	}
 }
 
 void APumpkinGun::NetMulticastBulletMisfired_Implementation()

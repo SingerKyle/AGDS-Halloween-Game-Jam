@@ -82,6 +82,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
 	TObjectPtr<USoundBase> GunFireSound;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
+	TObjectPtr<USoundBase> GunFireSoundBlank;
+	
 private:
 
 	UPROPERTY(ReplicatedUsing = OnRep_BulletData)

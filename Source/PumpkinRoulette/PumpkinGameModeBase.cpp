@@ -73,12 +73,8 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 		UE_LOG(LogTemp, Warning, TEXT("Hitpawn not valid"));
 		return;
 	}
-
-	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, "BulletFired");
-	UE_LOG(LogTemp, Warning, TEXT("BulletFired"));
 	
 	// if bullet is live then deal damage
-
 	if (HoldingPawn == HitPawn)
 	{
 		if (!bLiveBullet)
@@ -94,7 +90,7 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	{
 		if (bNextLiveBulletWin) // if the wildcard for instakill has been activated.
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Instakill"), DefaultDamageValue);
+			UE_LOG(LogTemp, Warning, TEXT("Instakill"));
 
 			// apply damage to player
 			UPumpkinHealthComponent* HitPawnHealthComponent = Cast<UPumpkinHealthComponent>(HitPawn->FindComponentByClass<UPumpkinHealthComponent>());
@@ -120,9 +116,6 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 			// set back to 0 after card effect is used
 			DamageModifier = 0;
 		}
-		
-		
-
 	}
 	else if (!bLiveBullet && bWildCardDamageOrHeal) // if the bullet is fake AND wildcard to heal is active.
 	{
