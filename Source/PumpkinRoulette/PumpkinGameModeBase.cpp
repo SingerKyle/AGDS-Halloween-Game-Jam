@@ -79,6 +79,7 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	{
 		if (!bLiveBullet)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Shooting myself!"));
 			// @TODO (Denis): Might need to reset turn here
 			return;
 		}

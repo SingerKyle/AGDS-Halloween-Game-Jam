@@ -76,8 +76,6 @@ void APumpkinGun::ServerFireBullet_Implementation()
 	const FVector Forward = GetActorForwardVector();
 	const FVector Start = GetActorLocation();
 	const FVector End = Start + (Forward * GunRange);
-	UE_LOG(LogTemp, Warning, TEXT("Start: X=%f, Y=%f, Z=%f"), Start.X, Start.Y, Start.Z);
-	UE_LOG(LogTemp, Warning, TEXT("End: X=%f, Y=%f, Z=%f"), End.X, End.Y, End.Z);
 	
 	const bool bDrawDebug = CVarShowDebugGunTrace.GetValueOnAnyThread() > 0;
 	EDrawDebugTrace::Type DrawDebugType = bDrawDebug ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
