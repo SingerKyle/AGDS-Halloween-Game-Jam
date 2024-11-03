@@ -11,15 +11,12 @@ void UCardEffect_SeeNextBullet::Execute(APawn* OwningPawn, APawn* TargetPawn)
 
 	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "See Next Bullet");
 
-	TArray<AActor*> Found;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APumpkinGun::StaticClass(), Found);
+	AActor* ActorGun = UGameplayStatics::GetActorOfClass(GetWorld(), APumpkinGun::StaticClass());
 
-	for (int i = 0; i < Found.Num(); i++)
+	APumpkinGun* PlayerGun = Cast<APumpkinGun>(ActorGun);
+
+	if (PlayerGun)
 	{
-		APumpkinGun* gun = Cast<APumpkinGun>(Found[i]);
-		if (gun)
-		{
-			UE_LOG(LogTemp, Display, TEXT("Next bullet is: %d"), gun->GetNextBullet());
-		}
+		UE_LOG(LogTemp, Display, TEXT("Next bullet is: %d"), PlayerGun->GetNextBullet());
 	}
 }
