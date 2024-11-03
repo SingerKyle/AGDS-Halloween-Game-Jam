@@ -74,7 +74,7 @@ void APumpkinGun::ServerFireBullet_Implementation()
 	}
 	
 	const FVector Forward = GetActorForwardVector();
-	const FVector Start = GetActorLocation();
+	const FVector Start = GetActorLocation() + (Forward * 10.f);
 	const FVector End = Start + (Forward * GunRange);
 	
 	const bool bDrawDebug = CVarShowDebugGunTrace.GetValueOnAnyThread() > 0;
