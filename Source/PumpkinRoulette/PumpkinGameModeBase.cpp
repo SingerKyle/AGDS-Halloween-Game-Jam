@@ -87,10 +87,6 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 			bNextLiveBulletWin = false;
 			return;
 		}
-		if (bWildCardDamageOrHeal)
-		{
-
-		}
 		// add on any card damage here:
 		int32 TotalDamage = DefaultDamageValue + DamageModifier;
 
