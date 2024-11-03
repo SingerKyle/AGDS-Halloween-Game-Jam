@@ -3,6 +3,7 @@
 
 #include "PumpkinGun.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "PumpkinRoulette/PumpkinGameModeBase.h"
@@ -34,7 +35,11 @@ void APumpkinGun::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& Ou
 void APumpkinGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (HasAuthority())
+	{
+		GetWorld()->GetAuthGameMode<APumpkinGameModeBase>()->RegisterGun(this);
+	}
 }
 
 // Called every frame
@@ -124,12 +129,12 @@ void APumpkinGun::OnRep_BulletData()
 
 void APumpkinGun::NetMulticastBulletFired_Implementation(bool bLiveBullet)
 {
-	// @TODO (Denis): Play an effect when a bullet has been fired
+	UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
 }
 
 void APumpkinGun::NetMulticastBulletMisfired_Implementation()
 {
-	// @TODO (Denis): Play a misfire sound effect
+	UGameplayStatics::PlaySoundAtLocation(this, MisfireSound, GetActorLocation());
 }
 
 void APumpkinGun::NetMulticastPostReload_Implementation(int32 LiveBullets, int32 DeadBullets)

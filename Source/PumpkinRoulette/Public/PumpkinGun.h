@@ -72,6 +72,12 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GunConfig")
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypesToTrace;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
+	TObjectPtr<USoundBase> MisfireSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
+	TObjectPtr<USoundBase> GunFireSound;
 	
 private:
 

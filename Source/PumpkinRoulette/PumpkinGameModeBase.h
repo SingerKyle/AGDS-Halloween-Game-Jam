@@ -36,6 +36,8 @@ public:
 
 	bool CanFire(APawn* HoldingPawn) const;
 
+	void RegisterGun(AActor* TheGun);
+	
 	UFUNCTION(BlueprintCallable, Category = Game)
 	int32 RequestPlayerIndex();
 	
@@ -54,6 +56,9 @@ public:
 	FORCEINLINE bool GetWildCardDamageOrHeal() { return bWildCardDamageOrHeal; }
 
 protected:
+
+	UPROPERTY()
+	AActor* Gun;
 
 	UPROPERTY()
 	int32 LastPlayerIndex = 0;

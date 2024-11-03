@@ -32,14 +32,28 @@ void APumpkinGameModeBase::SwitchTurn()
     {
     case EGameStates::Player1Turn:
         // Switch to other player turn state
+        if (Gun)
+        {
+	        Gun->TeleportTo(FVector(234.f, 7.f, 172.f), FRotator(0, 0, 0));
+        }
         CurrentGameState = EGameStates::Player2Turn;
         break;
     case EGameStates::Player2Turn:
         // Switch to other turn state
+        if (Gun)
+        {
+        	Gun->TeleportTo(FVector(390.f, 7.f, 172.f), FRotator(0, 0, -180));
+        }
         CurrentGameState = EGameStates::Player1Turn;
 
         break;
     default:
+    	// Really bad, but it should work for now
+    	if (Gun)
+    	{
+    		Gun->TeleportTo(FVector(390.f, 7.f, 172.f), FRotator(0, 0, -180));
+    	}
+    	CurrentGameState = EGameStates::Player1Turn;
 
         break;
     }
@@ -127,6 +141,12 @@ bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
 	}
 
 	return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 2;
+}
+
+void APumpkinGameModeBase::RegisterGun(AActor* TheGun)
+{
+	Gun = TheGun;
+	SwitchTurn();
 }
 
 int32 APumpkinGameModeBase::RequestPlayerIndex()
