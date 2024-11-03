@@ -160,6 +160,7 @@ void APumpkinGameModeBase::RegisterGun(APumpkinGun* TheGun)
 int32 APumpkinGameModeBase::RequestPlayerIndex()
 {
 	LastPlayerIndex += 1;
+	LastPlayerIndex = FMath::Clamp(LastPlayerIndex, 1, 2);
 	return LastPlayerIndex;
 }
 
