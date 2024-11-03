@@ -12,7 +12,7 @@ UPumpkinHealthComponent::UPumpkinHealthComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	SetIsReplicated(true);
-
+	
 	PlayerHealth = 10;
 }
 
