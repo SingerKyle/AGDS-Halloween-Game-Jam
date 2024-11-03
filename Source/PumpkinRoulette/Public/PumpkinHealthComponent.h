@@ -12,23 +12,25 @@ class PUMPKINROULETTE_API UPumpkinHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-	UPROPERTY(Replicated) int PlayerHealth;
 public:	
 	// Sets default values for this component's properties
 	UPumpkinHealthComponent();
 
 	void AdjustHealth(int HealthChange);
 	UFUNCTION(Server, Reliable) void ServerAdjustHealth(int HealthChange);
-	FORCEINLINE int GetHealth() { return PlayerHealth; }
+	FORCEINLINE int GetHealth() const { return PlayerHealth; }
 
-	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION()
+	void OnRep_PlayerHealth(int OldValue);
 
-		
+private:
+
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerHealth) int PlayerHealth;
+	
 };

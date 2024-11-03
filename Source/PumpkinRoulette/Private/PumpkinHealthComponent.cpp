@@ -9,7 +9,7 @@ UPumpkinHealthComponent::UPumpkinHealthComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	SetIsReplicated(true);
 	
@@ -18,23 +18,22 @@ UPumpkinHealthComponent::UPumpkinHealthComponent()
 
 void UPumpkinHealthComponent::AdjustHealth(int HealthChange)
 {
-	ServerAdjustHealth_Implementation(HealthChange);
+	ServerAdjustHealth(HealthChange);
 }
 
 void UPumpkinHealthComponent::ServerAdjustHealth_Implementation(int HealthChange)
 {
-	if (HealthChange < 0)
+	const int OldHealth = PlayerHealth;
+	PlayerHealth += HealthChange;
+	
+	OnRep_PlayerHealth(OldHealth);
+	if (PlayerHealth == 0)
 	{
-		PlayerHealth += HealthChange;
-	}
-	else
-	{
-		PlayerHealth -= HealthChange;
+		// Player lost
 	}
 }
 
-
-void UPumpkinHealthComponent::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+void UPumpkinHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
@@ -48,12 +47,7 @@ void UPumpkinHealthComponent::BeginPlay()
 	
 }
 
-
-// Called every frame
-void UPumpkinHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UPumpkinHealthComponent::OnRep_PlayerHealth(int OldValue)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	// Do UI stuff
 }
-
