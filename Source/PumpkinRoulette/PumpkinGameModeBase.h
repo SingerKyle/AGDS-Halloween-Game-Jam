@@ -44,6 +44,15 @@ public:
 
 	void SetDamageModifier(int NewDamageModifier);
 
+	void SetSkipNextTurn(bool Val);
+	FORCEINLINE bool GetSkipNextTurn() { return bSkipNextTurn; }
+
+	void SetNextLiveBulletWin(bool Val);
+	FORCEINLINE bool GetNextLiveBulletWin() { return bNextLiveBulletWin; }
+
+	void SetWildCardDamageOrHeal(bool Val);
+	FORCEINLINE bool GetWildCardDamageOrHeal() { return bWildCardDamageOrHeal; }
+
 protected:
 
 	UPROPERTY()
@@ -51,6 +60,13 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Damage") int DefaultDamageValue;
 	UPROPERTY(BlueprintReadWrite, Category = "Damage")int DamageModifier;
+
+	// variable for skip turn card.
+	bool bSkipNextTurn;
+	// variable for instakill
+	bool bNextLiveBulletWin;
+	// variable for wildcard damage / healing
+	bool bWildCardDamageOrHeal;
 
 	// Current game state
 	UPROPERTY(BlueprintReadOnly, Category = "Game State") EGameStates CurrentGameState;

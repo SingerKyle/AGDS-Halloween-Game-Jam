@@ -12,6 +12,12 @@ APumpkinGameModeBase::APumpkinGameModeBase()
 
 	DefaultDamageValue = -1;
 	DamageModifier = 0;
+
+	// variable for skip turn card.
+	bSkipNextTurn = false;
+	// variable for instakill
+	bNextLiveBulletWin = false;
+	bWildCardDamageOrHeal = false;
 }
 
 void APumpkinGameModeBase::BeginPlay()
@@ -65,6 +71,26 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	// Apply Damage is live bullet
 	if (bLiveBullet)
 	{
+		if (bNextLiveBulletWin) // if the wildcard for instakill has been activated.
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Instakill"), DefaultDamageValue);
+
+			// apply damage to player
+			UPumpkinHealthComponent* HitPawnHealthComponent = Cast<UPumpkinHealthComponent>(HitPawn->FindComponentByClass<UPumpkinHealthComponent>());
+			if (HitPawnHealthComponent)
+			{
+				HitPawnHealthComponent->Instakill(); // instakill
+				// set back to 0 after card effect is used
+				DamageModifier = 0;
+			}
+
+			bNextLiveBulletWin = false;
+			return;
+		}
+		if (bWildCardDamageOrHeal)
+		{
+
+		}
 		// add on any card damage here:
 		int32 TotalDamage = DefaultDamageValue + DamageModifier;
 
@@ -81,8 +107,20 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 		
 
 	}
+	else if (!bLiveBullet && bWildCardDamageOrHeal) // if the bullet is fake AND wildcard to heal is active.
+	{
+		// Add healing to other player
+	}
 
-	SwitchTurn();
+	// if card has not been played to skip turn - then move to next turn 
+	if (!GetSkipNextTurn) // NOTE: May need to create a reset turn function here depending.
+	{
+		SwitchTurn();
+	}
+	else
+	{
+		SetSkipNextTurn(false); // set variable back to false to move game on as normal.
+	}
 }
 
 bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
@@ -103,4 +141,19 @@ int32 APumpkinGameModeBase::RequestPlayerIndex()
 void APumpkinGameModeBase::SetDamageModifier(int NewDamageModifier)
 {
 	DamageModifier = NewDamageModifier;
+}
+
+void APumpkinGameModeBase::SetSkipNextTurn(bool Val)
+{
+	bSkipNextTurn = Val;
+}
+
+void APumpkinGameModeBase::SetNextLiveBulletWin(bool Val)
+{
+	bNextLiveBulletWin = Val;
+}
+
+void APumpkinGameModeBase::SetWildCardDamageOrHeal(bool Val)
+{
+	bWildCardDamageOrHeal = Val;
 }

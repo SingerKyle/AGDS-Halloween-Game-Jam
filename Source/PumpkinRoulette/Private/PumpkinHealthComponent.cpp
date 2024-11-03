@@ -21,6 +21,23 @@ void UPumpkinHealthComponent::AdjustHealth(int HealthChange)
 	ServerAdjustHealth(HealthChange);
 }
 
+void UPumpkinHealthComponent::Instakill()
+{
+	ServerInstakill();
+}
+
+void UPumpkinHealthComponent::ServerInstakill_Implementation()
+{
+	// kill player instantly
+	PlayerHealth = 0;
+
+	OnRep_PlayerHealth(PlayerHealth);
+	if(PlayerHealth == 0)
+	{
+		// Player Lost
+	}
+}
+
 void UPumpkinHealthComponent::ServerAdjustHealth_Implementation(int HealthChange)
 {
 	const int OldHealth = PlayerHealth;

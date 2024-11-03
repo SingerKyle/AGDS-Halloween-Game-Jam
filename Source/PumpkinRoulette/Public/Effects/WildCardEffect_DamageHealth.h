@@ -3,18 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PumpkinRoulette/Public/PumpkinCardEffect.h"
-#include "CardEffect_DamageHealth.generated.h"
+#include "PumpkinCardEffect.h"
+#include "WildCardEffect_DamageHealth.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PUMPKINROULETTE_API UCardEffect_DamageHealth : public UPumpkinCardEffect
+class PUMPKINROULETTE_API UWildCardEffect_DamageHealth : public UPumpkinCardEffect
 {
 	GENERATED_BODY()
 	
-	int DamageAmount = -1;
+	int DamageAmount = -3;
+	int HealAmount = 3;
 public:
 	virtual void Execute(APawn* OwningPawn, APawn* TargetPawn) override;
 };

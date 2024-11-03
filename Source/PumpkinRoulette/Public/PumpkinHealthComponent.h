@@ -18,6 +18,8 @@ public:
 
 	void AdjustHealth(int HealthChange);
 	UFUNCTION(Server, Reliable) void ServerAdjustHealth(int HealthChange);
+	void Instakill();
+	UFUNCTION(Server, Reliable) void ServerInstakill();
 	FORCEINLINE int GetHealth() const { return PlayerHealth; }
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
