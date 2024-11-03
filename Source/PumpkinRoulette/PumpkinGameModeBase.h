@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "PumpkinGameModeBase.generated.h"
 
+class APumpkinGun;
+
 UENUM(BlueprintType)
 enum class EGameStates : uint8
 {
@@ -36,7 +38,7 @@ public:
 
 	bool CanFire(APawn* HoldingPawn) const;
 
-	void RegisterGun(AActor* TheGun);
+	void RegisterGun(APumpkinGun* TheGun);
 	
 	UFUNCTION(BlueprintCallable, Category = Game)
 	int32 RequestPlayerIndex();
@@ -60,7 +62,7 @@ public:
 protected:
 
 	UPROPERTY()
-	AActor* Gun;
+	APumpkinGun* Gun;
 
 	UPROPERTY()
 	int32 LastPlayerIndex = 0;

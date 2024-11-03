@@ -31,6 +31,10 @@ void APumpkinGun::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& Ou
 	DOREPLIFETIME(APumpkinGun, Bullets);
 }
 
+void APumpkinGun::ForceDropGun_Implementation()
+{
+}
+
 // Called when the game starts or when spawned
 void APumpkinGun::BeginPlay()
 {
@@ -39,6 +43,7 @@ void APumpkinGun::BeginPlay()
 	if (HasAuthority())
 	{
 		GetWorld()->GetAuthGameMode<APumpkinGameModeBase>()->RegisterGun(this);
+		ReloadGun();
 	}
 }
 
@@ -70,7 +75,9 @@ void APumpkinGun::ServerFireBullet_Implementation()
 	
 	const FVector Forward = GetActorForwardVector();
 	const FVector Start = GetActorLocation();
-	const FVector End = Start + Forward * GunRange;
+	const FVector End = Start + (Forward * GunRange);
+	UE_LOG(LogTemp, Warning, TEXT("Start: X=%f, Y=%f, Z=%f"), Start.X, Start.Y, Start.Z);
+	UE_LOG(LogTemp, Warning, TEXT("End: X=%f, Y=%f, Z=%f"), End.X, End.Y, End.Z);
 	
 	const bool bDrawDebug = CVarShowDebugGunTrace.GetValueOnAnyThread() > 0;
 	EDrawDebugTrace::Type DrawDebugType = bDrawDebug ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
@@ -98,8 +105,6 @@ void APumpkinGun::ServerFireBullet_Implementation()
 	{
 		NetMulticastBulletMisfired();
 	}
-
-	
 }
 
 void APumpkinGun::ServerReloadGun_Implementation()

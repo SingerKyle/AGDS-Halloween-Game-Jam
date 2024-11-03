@@ -2,6 +2,7 @@
 
 #include "PumpkinGameModeBase.h"
 
+#include "PumpkinGun.h"
 #include "PumpkinPlayerInterface.h"
 #include "GameFramework/Pawn.h"
 #include "PumpkinHealthComponent.h"
@@ -10,7 +11,7 @@
 
 APumpkinGameModeBase::APumpkinGameModeBase()
 {
-    CurrentGameState = EGameStates::Player1Turn;
+    CurrentGameState = EGameStates::None;
 
 	DefaultDamageValue = -1;
 	DamageModifier = 0;
@@ -29,6 +30,7 @@ void APumpkinGameModeBase::BeginPlay()
 
 void APumpkinGameModeBase::SwitchTurn()
 {
+	Gun->ForceDropGun();
     // Switch Current Game State
     switch (CurrentGameState)
     {
@@ -36,7 +38,8 @@ void APumpkinGameModeBase::SwitchTurn()
         // Switch to other player turn state
         if (Gun)
         {
-	        Gun->TeleportTo(FVector(234.f, 7.f, 172.f), FRotator(0, 0, 0));
+        	Gun->SetActorLocation(FVector(390.f, 7.f, 172.f));
+        	Gun->SetActorRotation(FRotator(0, 0, 180));
         }
         CurrentGameState = EGameStates::Player2Turn;
         break;
@@ -44,7 +47,8 @@ void APumpkinGameModeBase::SwitchTurn()
         // Switch to other turn state
         if (Gun)
         {
-        	Gun->TeleportTo(FVector(390.f, 7.f, 172.f), FRotator(0, 0, -180));
+        	Gun->SetActorLocation(FVector(234.f, 7.f, 172.f));
+        	Gun->SetActorRotation(FRotator(0, 0, 180));
         }
         CurrentGameState = EGameStates::Player1Turn;
 
@@ -53,7 +57,8 @@ void APumpkinGameModeBase::SwitchTurn()
     	// Really bad, but it should work for now
     	if (Gun)
     	{
-    		Gun->TeleportTo(FVector(390.f, 7.f, 172.f), FRotator(0, 0, -180));
+    		Gun->SetActorLocation(FVector(234.f, 7.f, 172.f));
+    		Gun->SetActorRotation(FRotator(0, 0, 180));
     	}
     	CurrentGameState = EGameStates::Player1Turn;
 
@@ -137,6 +142,7 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 
 bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
 {
+	UE_LOG(LogTemp, Warning, TEXT("Turn is %s, and PlayerIndex is %d"), *UEnum::GetValueAsString(CurrentGameState), IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn));
 	if (CurrentGameState == EGameStates::Player1Turn)
 	{
 		return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 1;
@@ -145,7 +151,7 @@ bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
 	return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 2;
 }
 
-void APumpkinGameModeBase::RegisterGun(AActor* TheGun)
+void APumpkinGameModeBase::RegisterGun(APumpkinGun* TheGun)
 {
 	Gun = TheGun;
 	SwitchTurn();
@@ -153,7 +159,8 @@ void APumpkinGameModeBase::RegisterGun(AActor* TheGun)
 
 int32 APumpkinGameModeBase::RequestPlayerIndex()
 {
-	return ++LastPlayerIndex;
+	LastPlayerIndex += 1;
+	return LastPlayerIndex;
 }
 
 void APumpkinGameModeBase::SetDamageModifier(int NewDamageModifier)

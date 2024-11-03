@@ -34,6 +34,9 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	FORCEINLINE bool GetNextBullet() { return Bullets[1].bLiveBullet; };
+
+	UFUNCTION(BlueprintNativeEvent)
+	void ForceDropGun();
 	
 protected:
 	// Called when the game starts or when spawned
