@@ -42,12 +42,15 @@ public:
 	// Getter for the current game state
 	EGameStates GetCurrentGameState() const { return CurrentGameState; }
 
+	void SetDamageModifier(int NewDamageModifier);
+
 protected:
 
 	UPROPERTY()
 	int32 LastPlayerIndex = 0;
 
-	UPROPERTY() int DefaultDamageValue;
+	UPROPERTY(BlueprintReadWrite, Category = "Damage") int DefaultDamageValue;
+	UPROPERTY(BlueprintReadWrite, Category = "Damage")int DamageModifier;
 
 	// Current game state
 	UPROPERTY(BlueprintReadOnly, Category = "Game State") EGameStates CurrentGameState;

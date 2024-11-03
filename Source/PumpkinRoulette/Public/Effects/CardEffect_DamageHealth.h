@@ -15,6 +15,7 @@ class PUMPKINROULETTE_API UCardEffect_DamageHealth : public UPumpkinCardEffect
 {
 	GENERATED_BODY()
 	
+	int DamageAmount = -1;
 public:
 	virtual void Execute(APawn* OwningPawn, APawn* TargetPawn) override;
 };

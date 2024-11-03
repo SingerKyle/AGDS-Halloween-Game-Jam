@@ -11,6 +11,7 @@ APumpkinGameModeBase::APumpkinGameModeBase()
     CurrentGameState = EGameStates::Player1Turn;
 
 	DefaultDamageValue = -1;
+	DamageModifier = 0;
 }
 
 void APumpkinGameModeBase::BeginPlay()
@@ -64,10 +65,21 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	// Apply Damage is live bullet
 	if (bLiveBullet)
 	{
+		// add on any card damage here:
+		int32 TotalDamage = DefaultDamageValue + DamageModifier;
+
 		UE_LOG(LogTemp, Warning, TEXT("Dealing %d damage") , DefaultDamageValue);
 		// apply damage to player
 		UPumpkinHealthComponent* HitPawnHealthComponent = Cast<UPumpkinHealthComponent>(HitPawn->FindComponentByClass<UPumpkinHealthComponent>());
-		HitPawnHealthComponent->AdjustHealth(DefaultDamageValue); // take 1 health off
+		if (HitPawnHealthComponent)
+		{
+			HitPawnHealthComponent->AdjustHealth(TotalDamage); // take health off
+			// set back to 0 after card effect is used
+			DamageModifier = 0;
+		}
+		
+		
+
 	}
 
 	SwitchTurn();
@@ -86,4 +98,9 @@ bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
 int32 APumpkinGameModeBase::RequestPlayerIndex()
 {
 	return ++LastPlayerIndex;
+}
+
+void APumpkinGameModeBase::SetDamageModifier(int NewDamageModifier)
+{
+	DamageModifier = NewDamageModifier;
 }
