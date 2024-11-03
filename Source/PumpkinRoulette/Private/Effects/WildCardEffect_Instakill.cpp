@@ -15,6 +15,6 @@ void UWildCardEffect_Instakill::Execute(APawn* OwningPawn, APawn* TargetPawn)
 	if (GameMode)
 	{
 		// Sets next gunshot to have extra damage amount
-		GameMode->SetDamageModifier(DamageAmount);
+		GameMode->SetNextLiveBulletWin(true);
 	}
 }

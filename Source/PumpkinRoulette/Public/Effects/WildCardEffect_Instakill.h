@@ -13,9 +13,7 @@ UCLASS()
 class PUMPKINROULETTE_API UWildCardEffect_Instakill : public UPumpkinCardEffect
 {
 	GENERATED_BODY()
-	
-	int DamageAmount = -3;
-	int HealAmount = 3;
+
 public:
 	virtual void Execute(APawn* OwningPawn, APawn* TargetPawn) override;
 };
