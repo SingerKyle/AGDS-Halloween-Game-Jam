@@ -109,7 +109,7 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	}
 
 	// if card has not been played to skip turn - then move to next turn 
-	if (!GetSkipNextTurn) // NOTE: May need to create a reset turn function here depending.
+	if (!GetSkipNextTurn()) // NOTE: May need to create a reset turn function here depending.
 	{
 		SwitchTurn();
 	}
