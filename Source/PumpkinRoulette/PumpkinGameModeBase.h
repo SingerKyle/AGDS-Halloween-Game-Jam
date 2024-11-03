@@ -55,6 +55,8 @@ public:
 	void SetWildCardDamageOrHeal(bool Val);
 	FORCEINLINE bool GetWildCardDamageOrHeal() { return bWildCardDamageOrHeal; }
 
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+
 protected:
 
 	UPROPERTY()
@@ -72,6 +74,8 @@ protected:
 	bool bNextLiveBulletWin;
 	// variable for wildcard damage / healing
 	bool bWildCardDamageOrHeal;
+
+	int32 LastPlayerStartUsed = 0;
 
 	// Current game state
 	UPROPERTY(BlueprintReadOnly, Category = "Game State") EGameStates CurrentGameState;

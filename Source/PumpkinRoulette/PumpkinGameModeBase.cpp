@@ -5,6 +5,8 @@
 #include "PumpkinPlayerInterface.h"
 #include "GameFramework/Pawn.h"
 #include "PumpkinHealthComponent.h"
+#include "GameFramework/PlayerStart.h"
+#include "Kismet/GameplayStatics.h"
 
 APumpkinGameModeBase::APumpkinGameModeBase()
 {
@@ -172,4 +174,17 @@ void APumpkinGameModeBase::SetNextLiveBulletWin(bool Val)
 void APumpkinGameModeBase::SetWildCardDamageOrHeal(bool Val)
 {
 	bWildCardDamageOrHeal = Val;
+}
+
+AActor* APumpkinGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
+{
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), Actors);
+
+	if (Actors.Num() > LastPlayerStartUsed)
+	{
+		return Actors[LastPlayerStartUsed++];
+	}
+
+	return nullptr;
 }
