@@ -33,7 +33,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
-	FORCEINLINE bool GetNextBullet() { return Bullets[1].bLiveBullet; };
+	FORCEINLINE bool GetNextBullet() { return Bullets[0].bLiveBullet; };
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ForceDropGun();
