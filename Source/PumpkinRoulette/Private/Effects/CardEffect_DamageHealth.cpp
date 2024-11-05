@@ -7,11 +7,9 @@
 void UCardEffect_DamageHealth::Execute(APawn* OwningPawn, APawn* TargetPawn)
 {
 	Super::Execute(OwningPawn, TargetPawn);
-
-	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "+1 Damage to next shot");
-
+	
 	// will need to communicate to the gamemode or gun to change damage - probably gamemode.
-	APumpkinGameModeBase* GameMode = Cast<APumpkinGameModeBase>(GetWorld()->GetAuthGameMode());
+	APumpkinGameModeBase* GameMode = Cast<APumpkinGameModeBase>(OwningPawn->GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
 		// Sets next gunshot to have extra damage amount

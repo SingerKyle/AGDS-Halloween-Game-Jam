@@ -11,7 +11,7 @@ void UCardEffect_SeeNextBullet::Execute(APawn* OwningPawn, APawn* TargetPawn)
 
 	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "See Next Bullet");
 
-	AActor* ActorGun = UGameplayStatics::GetActorOfClass(GetWorld(), APumpkinGun::StaticClass());
+	AActor* ActorGun = UGameplayStatics::GetActorOfClass(OwningPawn->GetWorld(), APumpkinGun::StaticClass());
 
 	APumpkinGun* PlayerGun = Cast<APumpkinGun>(ActorGun);
 

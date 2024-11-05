@@ -8,7 +8,7 @@ void UCardEffect_SkipEnemyTurn::Execute(APawn* OwningPawn, APawn* TargetPawn)
 {
 	Super::Execute(OwningPawn, TargetPawn);
 
-	APumpkinGameModeBase* GameMode = Cast<APumpkinGameModeBase>(GetWorld()->GetAuthGameMode());
+	APumpkinGameModeBase* GameMode = Cast<APumpkinGameModeBase>(OwningPawn->GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
 		// Sets next gunshot to have extra damage amount
