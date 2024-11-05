@@ -6,6 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "PumpkinGameModeBase.generated.h"
 
+class APumpkinCard;
+class UPumpkinCardData;
+class APumpkinCardHolder;
 class APumpkinGun;
 
 UENUM(BlueprintType)
@@ -36,12 +39,12 @@ public:
 
 	void BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool bLiveBullet);
 
-	bool CanFire(APawn* HoldingPawn) const;
+	bool IsPlayersTurn(APawn* HoldingPawn) const;
 
 	void RegisterGun(APumpkinGun* TheGun);
 	
-	UFUNCTION(BlueprintCallable, Category = Game)
-	int32 RequestPlayerIndex();
+	UFUNCTION(BlueprintCallable, Category = Game, meta = (DefaultToSelf = Pawn))
+	int32 RequestPlayerIndex(APawn* Pawn);
 	
 	// Getter for the current game state
 	EGameStates GetCurrentGameState() const { return CurrentGameState; }
@@ -59,6 +62,10 @@ public:
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
+	APawn* GetOtherPlayer(const APawn* Player) const;
+
+	void SpawnCard();
+	
 protected:
 
 	UPROPERTY()
@@ -67,9 +74,27 @@ protected:
 	UPROPERTY()
 	int32 LastPlayerIndex = 0;
 
+	UPROPERTY()
+	APawn* Pawn1;
+	
+	UPROPERTY()
+	APawn* Pawn2;
+
+	UPROPERTY()
+	TArray<APumpkinCardHolder*> Player1CardHolders;
+
+	UPROPERTY()
+	TArray<APumpkinCardHolder*> Player2CardHolders;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<UPumpkinCardData*> CardDatas;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<APumpkinCard> CardTemplate;
+	
 	UPROPERTY(BlueprintReadWrite, Category = "Damage") int DefaultDamageValue;
 	UPROPERTY(BlueprintReadWrite, Category = "Damage")int DamageModifier;
-
+	
 	// variable for skip turn card.
 	bool bSkipNextTurn;
 	// variable for instakill
@@ -81,4 +106,9 @@ protected:
 
 	// Current game state
 	UPROPERTY(BlueprintReadOnly, Category = "Game State") EGameStates CurrentGameState;
+
+private:
+
+	APumpkinCardHolder* TryFindFreeCardHolder(const TArray<APumpkinCardHolder*>& CardHolders) const;
+	UPumpkinCardData* GetRandomCardData() const;
 };

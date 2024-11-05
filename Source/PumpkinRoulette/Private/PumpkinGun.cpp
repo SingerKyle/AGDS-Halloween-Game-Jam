@@ -67,7 +67,7 @@ void APumpkinGun::FireBullet()
 void APumpkinGun::ServerFireBullet_Implementation()
 {
 	APumpkinGameModeBase* GameMode = Cast<APumpkinGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (GameMode->CanFire(GetHoldingPawn()) == false)
+	if (GameMode->IsPlayersTurn(GetHoldingPawn()) == false)
 	{
 		NetMulticastBulletMisfired();
 		return;

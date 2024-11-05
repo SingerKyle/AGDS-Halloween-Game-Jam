@@ -2,6 +2,8 @@
 
 #include "PumpkinGameModeBase.h"
 
+#include "PumpkinCard.h"
+#include "PumpkinCardHolder.h"
 #include "PumpkinGun.h"
 #include "PumpkinPlayerInterface.h"
 #include "GameFramework/Pawn.h"
@@ -21,11 +23,30 @@ APumpkinGameModeBase::APumpkinGameModeBase()
 	// variable for instakill
 	bNextLiveBulletWin = false;
 	bWildCardDamageOrHeal = false;
+
+	Player1CardHolders = {nullptr, nullptr, nullptr, nullptr, nullptr};
+	Player2CardHolders = {nullptr, nullptr, nullptr, nullptr, nullptr};
 }
 
 void APumpkinGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
+
+	TArray<AActor*> CardHolders;
+	UGameplayStatics::GetAllActorsOfClass(this, APumpkinCardHolder::StaticClass(), CardHolders);
+
+	for (const auto& CardHolder : CardHolders)
+	{
+		APumpkinCardHolder* Holder = Cast<APumpkinCardHolder>(CardHolder);
+		if (Holder->CardHolderType == ECardHolderType::Player1)
+		{
+			Player1CardHolders[Holder->CardSlotIndex] = Holder;
+		}
+		else
+		{
+			Player2CardHolders[Holder->CardSlotIndex] = Holder;
+		}
+	}
 }
 
 void APumpkinGameModeBase::SwitchTurn()
@@ -64,6 +85,8 @@ void APumpkinGameModeBase::SwitchTurn()
 
         break;
     }
+
+	SpawnCard();
 }
 
 void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool bLiveBullet)
@@ -134,9 +157,8 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	}
 }
 
-bool APumpkinGameModeBase::CanFire(APawn* HoldingPawn) const
+bool APumpkinGameModeBase::IsPlayersTurn(APawn* HoldingPawn) const
 {
-	UE_LOG(LogTemp, Warning, TEXT("Turn is %s, and PlayerIndex is %d"), *UEnum::GetValueAsString(CurrentGameState), IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn));
 	if (CurrentGameState == EGameStates::Player1Turn)
 	{
 		return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 1;
@@ -151,10 +173,19 @@ void APumpkinGameModeBase::RegisterGun(APumpkinGun* TheGun)
 	SwitchTurn();
 }
 
-int32 APumpkinGameModeBase::RequestPlayerIndex()
+int32 APumpkinGameModeBase::RequestPlayerIndex(APawn* Pawn)
 {
 	LastPlayerIndex += 1;
 	LastPlayerIndex = FMath::Clamp(LastPlayerIndex, 1, 2);
+	if (LastPlayerIndex == 1)
+	{
+		Pawn1 = Pawn;
+	}
+	else
+	{
+		Pawn2 = Pawn;
+	}
+	
 	return LastPlayerIndex;
 }
 
@@ -189,4 +220,55 @@ AActor* APumpkinGameModeBase::ChoosePlayerStart_Implementation(AController* Play
 	}
 
 	return nullptr;
+}
+
+APawn* APumpkinGameModeBase::GetOtherPlayer(const APawn* Player) const
+{
+	return Player == Pawn1 ? Pawn2 : Pawn1;
+}
+
+void APumpkinGameModeBase::SpawnCard()
+{
+	if (CurrentGameState == EGameStates::Player1Turn)
+	{
+		if (auto CardHolder = TryFindFreeCardHolder(Player1CardHolders))
+		{
+			APumpkinCard* Card = GetWorld()->SpawnActorDeferred<APumpkinCard>(CardTemplate, CardHolder->GetActorTransform(), Pawn1);
+			Card->SetCardData(GetRandomCardData());
+			Card->SetCardSlotLocation(CardHolder->GetActorTransform());
+			CardHolder->SetCard(Card);
+			Card->FinishSpawning(CardHolder->GetActorTransform());
+		}
+	}
+	else if (CurrentGameState == EGameStates::Player2Turn)
+	{
+		if (auto CardHolder = TryFindFreeCardHolder(Player2CardHolders))
+		{
+			APumpkinCard* Card = GetWorld()->SpawnActorDeferred<APumpkinCard>(CardTemplate, CardHolder->GetActorTransform(), Pawn1);
+			Card->SetCardData(GetRandomCardData());
+			Card->SetCardSlotLocation(CardHolder->GetActorTransform());
+			CardHolder->SetCard(Card);
+			Card->FinishSpawning(CardHolder->GetActorTransform());
+		}
+	}
+}
+
+APumpkinCardHolder* APumpkinGameModeBase::TryFindFreeCardHolder(const TArray<APumpkinCardHolder*>& CardHolders) const
+{
+	for (const auto& CardHolder : CardHolders)
+	{
+		if (CardHolder->HasCard())
+		{
+			continue;
+		}
+
+		return CardHolder;
+	}
+	
+	return nullptr;
+}
+
+UPumpkinCardData* APumpkinGameModeBase::GetRandomCardData() const
+{
+	return CardDatas[FMath::RandRange(0, CardDatas.Num() - 1)];
 }
