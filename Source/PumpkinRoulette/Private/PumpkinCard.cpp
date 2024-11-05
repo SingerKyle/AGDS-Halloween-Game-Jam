@@ -63,6 +63,7 @@ void APumpkinCard::OnGripRelease_Implementation(UGripMotionControllerComponent* 
 	if (!GameMode->IsPlayersTurn(InstigatorPawn))
 	{
 		SetActorTransform(CardSlotLocation);
+		ClientResetCard(CardSlotLocation);
 		return;
 	}
 	
@@ -81,6 +82,12 @@ void APumpkinCard::OnGripRelease_Implementation(UGripMotionControllerComponent* 
 
 	// Reset card position, because it was incorrect placement
 	SetActorTransform(CardSlotLocation);
+	ClientResetCard(CardSlotLocation);
+}
+
+void APumpkinCard::ClientResetCard_Implementation(FTransform Transform)
+{
+	SetActorTransform(Transform);
 }
 
 // Called when the game starts or when spawned
@@ -121,6 +128,7 @@ void APumpkinCard::ServerPlayCard_Implementation(APawn* PawnInstigator, APawn* T
 	}
 
 	OnCardPlayed.Broadcast();
+	Destroy();
 }
 
 void APumpkinCard::OnRep_CardData()

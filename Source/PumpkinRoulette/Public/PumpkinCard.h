@@ -39,6 +39,9 @@ public:
 
 	virtual void OnGripRelease_Implementation(UGripMotionControllerComponent* ReleasingController, const FBPActorGripInformation& GripInformation, bool bWasSocketed) override;
 
+	UFUNCTION(Client, Reliable)
+	void ClientResetCard(FTransform Transform);
+	
 public:
 
 	UPROPERTY()
