@@ -60,7 +60,7 @@ void APumpkinGameModeBase::SwitchTurn()
         if (Gun)
         {
         	Gun->SetActorLocation(FVector(390.f, 7.f, 172.f));
-        	Gun->SetActorRotation(FRotator(180, 0, 0));
+        	Gun->SetActorRotation(FRotator(180.f, 0.f, 180.f));
         }
         CurrentGameState = EGameStates::Player2Turn;
         break;
@@ -69,7 +69,7 @@ void APumpkinGameModeBase::SwitchTurn()
         if (Gun)
         {
         	Gun->SetActorLocation(FVector(234.f, 7.f, 172.f));
-        	Gun->SetActorRotation(FRotator(180, 0, 0));
+        	Gun->SetActorRotation(FRotator(0.f, 0.f, 0.f));
         }
         CurrentGameState = EGameStates::Player1Turn;
 
@@ -79,7 +79,7 @@ void APumpkinGameModeBase::SwitchTurn()
     	if (Gun)
     	{
     		Gun->SetActorLocation(FVector(234.f, 7.f, 172.f));
-    		Gun->SetActorRotation(FRotator(0, 0, 180));
+    		Gun->SetActorRotation(FRotator(0.f, 0.f, 0.f));
     	}
     	CurrentGameState = EGameStates::Player1Turn;
 
