@@ -134,4 +134,5 @@ void APumpkinCard::ServerPlayCard_Implementation(APawn* PawnInstigator, APawn* T
 void APumpkinCard::OnRep_CardData()
 {
 	CardMesh->SetMaterial(0, CardData->Material);
+	CardMesh->SetMaterial(1, CardData->Material);
 }
