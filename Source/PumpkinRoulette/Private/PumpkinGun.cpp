@@ -118,25 +118,27 @@ void APumpkinGun::ServerReloadGun_Implementation()
 	int32 LiveBullets = 0;
 	int32 DeadBullets = 0;
 	const int32 NumLiveBullets = FMath::RandRange(1, 3);
+	const int32 NumDeadBullets = 6 - NumLiveBullets;
 	
-	for (int32 i = 0; i < 6; ++i)
+	for (int32 Idx = 0; Idx < NumLiveBullets; ++Idx)
 	{
-		// How do we determine if a bullet is live
 		FBulletData Data;
-		const bool bIsLive = FMath::RandBool();
-		if (bIsLive && LiveBullets < NumLiveBullets)
-		{
-			Data.bLiveBullet = bIsLive;
-			++LiveBullets;
-		}
-		else
-		{
-			Data.bLiveBullet = false;
-			++DeadBullets;
-		}
-		
+		Data.bLiveBullet = true;
 		Bullets.Add(Data);
 	}
+	for (int32 Idx = 0; Idx < NumDeadBullets; ++Idx)
+	{
+		FBulletData Data;
+		Data.bLiveBullet = false;
+		Bullets.Add(Data);
+	}
+
+	FMath::SRandInit(FMath::Rand());
+	// Shuffle Array
+	Algo::Sort(Bullets, [](const FBulletData& A, const FBulletData& B)
+	{
+		return FMath::SRand() > 0.5f;
+	});
 
 	APumpkinGameModeBase* GameMode = GetWorld()->GetAuthGameMode<APumpkinGameModeBase>();
 	const FString Message = FString::Printf(TEXT("Live: %d, Blank: %d"), LiveBullets, DeadBullets); 

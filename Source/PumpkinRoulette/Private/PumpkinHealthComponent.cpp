@@ -15,7 +15,7 @@ UPumpkinHealthComponent::UPumpkinHealthComponent()
 
 	SetIsReplicatedByDefault(true);
 	
-	PlayerHealth = 10;
+	PlayerHealth = 5;
 }
 
 void UPumpkinHealthComponent::AdjustHealth(int HealthChange)
