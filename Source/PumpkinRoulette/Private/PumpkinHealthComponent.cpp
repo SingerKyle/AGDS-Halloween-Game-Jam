@@ -63,6 +63,11 @@ void UPumpkinHealthComponent::BeginPlay()
 	
 }
 
+void UPumpkinHealthComponent::MulticastUpdateHealth_Implementation(int NewHealth)
+{
+	OnHealthChanged.Broadcast(NewHealth);
+}
+
 void UPumpkinHealthComponent::OnRep_PlayerHealth()
 {
 	OnHealthChanged.Broadcast(PlayerHealth);

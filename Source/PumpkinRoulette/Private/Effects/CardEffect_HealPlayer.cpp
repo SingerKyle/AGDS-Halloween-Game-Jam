@@ -14,7 +14,7 @@ void UCardEffect_HealPlayer::Execute(APawn* OwningPawn, APawn* TargetPawn)
 		if (UPumpkinHealthComponent* HealthComponent = Cast<UPumpkinHealthComponent>(OwningPawn->GetComponentByClass<UPumpkinHealthComponent>()))
 		{
 			HealthComponent->AdjustHealth(1);
-			IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("+1 Damage"));
+			IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("+1 Health"));
 		}
 	}
 }

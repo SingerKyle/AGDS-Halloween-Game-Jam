@@ -32,6 +32,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastUpdateHealth(int NewHealth);
+
 	UFUNCTION()
 	void OnRep_PlayerHealth();
 
