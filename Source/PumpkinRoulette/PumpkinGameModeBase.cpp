@@ -63,6 +63,8 @@ void APumpkinGameModeBase::SwitchTurn()
         	Gun->SetActorRotation(FRotator(180.f, 0.f, 180.f));
         }
         CurrentGameState = EGameStates::Player2Turn;
+    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, FString("Enemy turn!"));
+    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Your turn!"));
         break;
     case EGameStates::Player2Turn:
         // Switch to other turn state
@@ -72,7 +74,8 @@ void APumpkinGameModeBase::SwitchTurn()
         	Gun->SetActorRotation(FRotator(0.f, 0.f, 0.f));
         }
         CurrentGameState = EGameStates::Player1Turn;
-
+    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, FString("Your turn!"));
+    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Enemy turn!"));
         break;
     default:
     	// Really bad, but it should work for now
@@ -82,7 +85,8 @@ void APumpkinGameModeBase::SwitchTurn()
     		Gun->SetActorRotation(FRotator(0.f, 0.f, 0.f));
     	}
     	CurrentGameState = EGameStates::Player1Turn;
-
+    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, FString("Your turn!"));
+    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Enemy turn!"));
         break;
     }
 

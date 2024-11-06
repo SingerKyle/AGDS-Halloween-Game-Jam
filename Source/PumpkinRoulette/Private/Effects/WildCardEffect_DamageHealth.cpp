@@ -2,14 +2,14 @@
 
 
 #include "Effects/WildCardEffect_DamageHealth.h"
+
+#include "PumpkinPlayerInterface.h"
 #include "PumpkinRoulette/PumpkinGameModeBase.h"
 
 void UWildCardEffect_DamageHealth::Execute(APawn* OwningPawn, APawn* TargetPawn)
 {
 	Super::Execute(OwningPawn, TargetPawn);
-
-	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "That's a lot of damage! Potentially!");
-
+	
 	// will need to communicate to the gamemode or gun to change damage - probably gamemode.
 	APumpkinGameModeBase* GameMode = Cast<APumpkinGameModeBase>(OwningPawn->GetWorld()->GetAuthGameMode());
 	if (GameMode)
@@ -18,5 +18,7 @@ void UWildCardEffect_DamageHealth::Execute(APawn* OwningPawn, APawn* TargetPawn)
 		GameMode->SetDamageModifier(DamageAmount);
 		// sets wildcard to be true
 		GameMode->SetWildCardDamageOrHeal(true);
+
+		IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("Wildcard played!"));
 	}
 }

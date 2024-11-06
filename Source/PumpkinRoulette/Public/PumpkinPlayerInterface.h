@@ -25,4 +25,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	int32 GetPlayerIndex() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void DisplayNotification(const FString& Notification);
 };

@@ -66,5 +66,5 @@ void UPumpkinHealthComponent::BeginPlay()
 
 void UPumpkinHealthComponent::OnRep_PlayerHealth(int OldValue)
 {
-	// Do UI stuff
+	OnHealthChanged.Broadcast(PlayerHealth);
 }

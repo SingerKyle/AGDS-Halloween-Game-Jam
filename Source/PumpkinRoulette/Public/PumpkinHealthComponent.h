@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "PumpkinHealthComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, int32, NewHealth);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PUMPKINROULETTE_API UPumpkinHealthComponent : public UActorComponent
@@ -23,6 +24,9 @@ public:
 	FORCEINLINE int GetHealth() const { return PlayerHealth; }
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChangedSignature OnHealthChanged;
 	
 protected:
 	// Called when the game starts

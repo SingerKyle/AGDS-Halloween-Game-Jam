@@ -3,28 +3,18 @@
 
 #include "Effects/CardEffect_HealPlayer.h"
 #include "PumpkinHealthComponent.h"
+#include "PumpkinPlayerInterface.h"
 
 void UCardEffect_HealPlayer::Execute(APawn* OwningPawn, APawn* TargetPawn)
 {
 	Super::Execute(OwningPawn, TargetPawn);
-
 	
 	if (OwningPawn)
 	{
-		UPumpkinHealthComponent* HealthComponent = Cast<UPumpkinHealthComponent>(OwningPawn->GetComponentByClass<UPumpkinHealthComponent>());
-		if (HealthComponent)
+		if (UPumpkinHealthComponent* HealthComponent = Cast<UPumpkinHealthComponent>(OwningPawn->GetComponentByClass<UPumpkinHealthComponent>()))
 		{
 			HealthComponent->AdjustHealth(1);
-			GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "+1 Healing to player");
-		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "Can't find component");
+			IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("+1 Damage"));
 		}
 	}
-	else 
-	{
-		GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "OwningPawn isn't valid");
-	}
-	
 }

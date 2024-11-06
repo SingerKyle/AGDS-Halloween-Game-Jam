@@ -2,6 +2,8 @@
 
 
 #include "Effects/CardEffect_SeeNextBullet.h"
+
+#include "PumpkinPlayerInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "PumpkinRoulette/Public/PumpkinGun.h"
 
@@ -9,14 +11,11 @@ void UCardEffect_SeeNextBullet::Execute(APawn* OwningPawn, APawn* TargetPawn)
 {
 	Super::Execute(OwningPawn, TargetPawn);
 
-	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "See Next Bullet");
-
-	AActor* ActorGun = UGameplayStatics::GetActorOfClass(OwningPawn->GetWorld(), APumpkinGun::StaticClass());
-
-	APumpkinGun* PlayerGun = Cast<APumpkinGun>(ActorGun);
-
-	if (PlayerGun)
+	const AActor* ActorGun = UGameplayStatics::GetActorOfClass(OwningPawn->GetWorld(), APumpkinGun::StaticClass());
+	if (const APumpkinGun* PlayerGun = Cast<APumpkinGun>(ActorGun))
 	{
-		UE_LOG(LogTemp, Display, TEXT("Next bullet is: %d"), PlayerGun->GetNextBullet());
+		const FString NextBullet = PlayerGun->GetNextBullet() ?  FString("Live") : FString("Blank");
+		IPumpkinPlayerInterface::Execute_DisplayNotification(OwningPawn, NextBullet);
+		IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("Sees next bullet"));
 	}
 }

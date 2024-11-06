@@ -2,6 +2,8 @@
 
 
 #include "Effects/CardEffect_SkipEnemyTurn.h"
+
+#include "PumpkinPlayerInterface.h"
 #include "PumpkinRoulette/PumpkinGameModeBase.h"
 
 void UCardEffect_SkipEnemyTurn::Execute(APawn* OwningPawn, APawn* TargetPawn)
@@ -13,7 +15,6 @@ void UCardEffect_SkipEnemyTurn::Execute(APawn* OwningPawn, APawn* TargetPawn)
 	{
 		// Sets next gunshot to have extra damage amount
 		GameMode->SetSkipNextTurn(true);
-		GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "Skip Enemy Turn");
-
+		IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("Skips your next turn"));
 	}
 }

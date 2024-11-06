@@ -2,6 +2,8 @@
 
 
 #include "Effects/CardEffect_DamageHealth.h"
+
+#include "PumpkinPlayerInterface.h"
 #include "PumpkinRoulette/PumpkinGameModeBase.h"
 
 void UCardEffect_DamageHealth::Execute(APawn* OwningPawn, APawn* TargetPawn)
@@ -14,6 +16,7 @@ void UCardEffect_DamageHealth::Execute(APawn* OwningPawn, APawn* TargetPawn)
 	{
 		// Sets next gunshot to have extra damage amount
 		GameMode->SetDamageModifier(DamageAmount);
+		IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, FString("+1 Damage"));
 	}
 
 }
