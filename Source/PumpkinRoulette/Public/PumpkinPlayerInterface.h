@@ -28,4 +28,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void DisplayNotification(const FString& Notification);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ExplodeHead();
 };

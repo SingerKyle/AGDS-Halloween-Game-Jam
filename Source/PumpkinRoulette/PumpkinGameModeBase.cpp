@@ -276,6 +276,16 @@ void APumpkinGameModeBase::RouteMessageToBothPlayers(const FString& Message)
 	}
 }
 
+void APumpkinGameModeBase::OnPlayerDead(APawn* Pawn)
+{
+	APawn* TargetPawn = GetOtherPlayer(Pawn);
+	IPumpkinPlayerInterface::Execute_ExplodeHead(Pawn);
+
+	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn, "You Lost!");
+	IPumpkinPlayerInterface::Execute_DisplayNotification(TargetPawn, "You Won!");
+	CurrentGameState = EGameStates::GameEnd;
+}
+
 APumpkinCardHolder* APumpkinGameModeBase::TryFindFreeCardHolder(const TArray<APumpkinCardHolder*>& CardHolders) const
 {
 	for (const auto& CardHolder : CardHolders)

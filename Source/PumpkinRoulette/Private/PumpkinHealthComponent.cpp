@@ -4,6 +4,8 @@
 #include "PumpkinHealthComponent.h"
 #include <Net/UnrealNetwork.h>
 
+#include "PumpkinRoulette/PumpkinGameModeBase.h"
+
 // Sets default values for this component's properties
 UPumpkinHealthComponent::UPumpkinHealthComponent()
 {
@@ -34,7 +36,11 @@ void UPumpkinHealthComponent::ServerInstakill_Implementation()
 	OnRep_PlayerHealth();
 	if(PlayerHealth == 0)
 	{
-		// Player Lost
+		APumpkinGameModeBase* GameMode = GetWorld()->GetAuthGameMode<APumpkinGameModeBase>();
+		if (GameMode)
+		{
+			GameMode->OnPlayerDead(Cast<APawn>(GetOwner()));
+		}
 	}
 }
 

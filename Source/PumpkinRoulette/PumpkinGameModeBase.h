@@ -16,7 +16,9 @@ enum class EGameStates : uint8
 {
 	None = 0,
 	Player1Turn = 1		UMETA(DisplayName = "Player 1's Turn"),
-	Player2Turn = 2		UMETA(DisplayName = "Player 2's Turn")
+	Player2Turn = 2		UMETA(DisplayName = "Player 2's Turn"),
+
+	GameEnd
 };
 
 /**
@@ -67,7 +69,8 @@ public:
 	void SpawnCard();
 
 	void RouteMessageToBothPlayers(const FString& Message);
-	
+	void OnPlayerDead(APawn* Pawn);
+
 protected:
 
 	UPROPERTY()

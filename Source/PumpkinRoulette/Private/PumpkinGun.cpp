@@ -93,16 +93,16 @@ void APumpkinGun::ServerFireBullet_Implementation()
 	{
 		FBulletData Data = Bullets[0];
 		Bullets.RemoveAt(0);
+		APawn* HitPawn = Cast<APawn>(OutHit.GetActor());
+		APawn* HoldingPawn = GetHoldingPawn();
+
+		GameMode->BulletFired(HoldingPawn, HitPawn, Data.bLiveBullet);
 
 		if (Bullets.Num() == 0)
 		{
 			ReloadGun();
 		}
-
-		APawn* HitPawn = Cast<APawn>(OutHit.GetActor());
-		APawn* HoldingPawn = GetHoldingPawn();
-
-		GameMode->BulletFired(HoldingPawn, HitPawn, Data.bLiveBullet);
+		
 		NetMulticastBulletFired(Data.bLiveBullet);
 	}
 	else
