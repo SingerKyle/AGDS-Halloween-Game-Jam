@@ -51,7 +51,11 @@ void UPumpkinHealthComponent::ServerAdjustHealth_Implementation(int HealthChange
 	OnRep_PlayerHealth();
 	if (PlayerHealth == 0)
 	{
-		// Player lost
+		APumpkinGameModeBase* GameMode = GetWorld()->GetAuthGameMode<APumpkinGameModeBase>();
+		if (GameMode)
+		{
+			GameMode->OnPlayerDead(Cast<APawn>(GetOwner()));
+		}
 	}
 }
 

@@ -104,6 +104,7 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	if(!HitPawn)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hitpawn not valid"));
+		DamageModifier = 0;
 		return;
 	}
 	
@@ -112,8 +113,7 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	{
 		if (!bLiveBullet)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Shooting myself!"));
-			// @TODO (Denis): Might need to reset turn here
+			DamageModifier = 0;
 			return;
 		}
 	
@@ -132,9 +132,9 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 			{
 				HitPawnHealthComponent->Instakill(); // instakill
 				// set back to 0 after card effect is used
-				DamageModifier = 0;
 			}
 
+			DamageModifier = 0;
 			bNextLiveBulletWin = false;
 			return;
 		}
@@ -148,7 +148,6 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 		{
 			HitPawnHealthComponent->AdjustHealth(TotalDamage); // take health off
 			// set back to 0 after card effect is used
-			DamageModifier = 0;
 		}
 	}
 	else if (!bLiveBullet && bWildCardDamageOrHeal) // if the bullet is fake AND wildcard to heal is active.
@@ -165,6 +164,8 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 	{
 		SetSkipNextTurn(false); // set variable back to false to move game on as normal.
 	}
+	
+	DamageModifier = 0;
 }
 
 bool APumpkinGameModeBase::IsPlayersTurn(APawn* HoldingPawn) const
