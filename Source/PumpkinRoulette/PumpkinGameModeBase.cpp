@@ -156,6 +156,11 @@ void APumpkinGameModeBase::BulletFired(APawn* HoldingPawn, APawn* HitPawn, bool 
 
 bool APumpkinGameModeBase::IsPlayersTurn(APawn* HoldingPawn) const
 {
+	if (CurrentGameState == EGameStates::GameEnd)
+	{
+		return false;
+	}
+	
 	if (CurrentGameState == EGameStates::Player1Turn)
 	{
 		return IPumpkinPlayerInterface::Execute_GetPlayerIndex(HoldingPawn) == 1;
