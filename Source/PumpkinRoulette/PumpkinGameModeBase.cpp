@@ -67,6 +67,7 @@ void APumpkinGameModeBase::SwitchTurn()
     	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Your turn!"));
         break;
     case EGameStates::Player2Turn:
+    case EGameStates::None:
         // Switch to other turn state
         if (Gun)
         {
@@ -78,22 +79,7 @@ void APumpkinGameModeBase::SwitchTurn()
     	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Enemy turn!"));
         break;
     default:
-    	// Really bad, but it should work for now
-    	if (Gun)
-    	{
-    		Gun->SetActorLocation(FVector(234.f, 7.f, 172.f));
-    		Gun->SetActorRotation(FRotator(0.f, 0.f, 0.f));
-    	}
-    	CurrentGameState = EGameStates::Player1Turn;
-    	if (Pawn1)
-    	{
-    		IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, FString("Your turn!"));
-    	}
-    	if (Pawn2)
-    	{
-    		IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Enemy turn!"));
-    	}
-        break;
+    	break;
     }
 
 	SpawnCard();
