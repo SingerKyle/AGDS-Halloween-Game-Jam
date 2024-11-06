@@ -117,8 +117,7 @@ void APumpkinCard::PlayCard(APawn* PawnInstigator, APawn* Target)
 
 void APumpkinCard::ServerPlayCard_Implementation(APawn* PawnInstigator, APawn* Target)
 {
-	// Play the card server side,
-	// @NOTE (Denis): We'll need to figure out exactly how a card is played
+	OnCardPlayed.Broadcast();
 	for (const auto Effect : CardData->Effects)
 	{
 		if (Effect)
@@ -127,7 +126,6 @@ void APumpkinCard::ServerPlayCard_Implementation(APawn* PawnInstigator, APawn* T
 		}
 	}
 
-	OnCardPlayed.Broadcast();
 	Destroy();
 }
 
