@@ -189,13 +189,12 @@ int32 APumpkinGameModeBase::RequestPlayerIndex(APawn* Pawn)
 	if (LastPlayerIndex == 1)
 	{
 		Pawn1 = Pawn;
-		UE_LOG(LogTemp, Error, TEXT("Pawn1 Joined"));
-		SwitchTurn();
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Pawn2 Joined"));
 		Pawn2 = Pawn;
+		SwitchTurn();
+		Gun->ReloadGun();
 	}
 	
 	return LastPlayerIndex;
@@ -262,6 +261,18 @@ void APumpkinGameModeBase::SpawnCard()
 			CardHolder->SetCard(Card);
 			Card->FinishSpawning(CardHolder->GetActorTransform());
 		}
+	}
+}
+
+void APumpkinGameModeBase::RouteMessageToBothPlayers(const FString& Message)
+{
+	if (Pawn1)
+	{
+		IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, Message);
+	}
+	if (Pawn2)
+	{
+		IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, Message);
 	}
 }
 

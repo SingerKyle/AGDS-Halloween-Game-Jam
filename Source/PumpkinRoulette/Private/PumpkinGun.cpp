@@ -3,6 +3,7 @@
 
 #include "PumpkinGun.h"
 
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
@@ -21,6 +22,12 @@ APumpkinGun::APumpkinGun(const FObjectInitializer& ObjectInitializer) : Super(Ob
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	GunMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunMesh"));
+	SetRootComponent(GunMesh);
+	
+	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
+	MuzzleLocation->SetupAttachment(GetRootComponent());
+	
 	bReplicates = true;
 }
 
@@ -84,7 +91,6 @@ void APumpkinGun::ServerFireBullet_Implementation()
 	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, Start, End, TraceRadius, ObjectTypesToTrace,
 		false, {this}, DrawDebugType, OutHit, true))
 	{
-		// @TODO (Denis): Determine who is shooting and who is being shot, then let the GameMode know, also do some feedback
 		FBulletData Data = Bullets[0];
 		Bullets.RemoveAt(0);
 
@@ -111,18 +117,30 @@ void APumpkinGun::ServerReloadGun_Implementation()
 
 	int32 LiveBullets = 0;
 	int32 DeadBullets = 0;
+	const int32 NumLiveBullets = FMath::RandRange(1, 3);
+	
 	for (int32 i = 0; i < 6; ++i)
 	{
 		// How do we determine if a bullet is live
 		FBulletData Data;
-		Data.bLiveBullet = FMath::RandBool();
-		LiveBullets += Data.bLiveBullet ? 1 : 0;
-		DeadBullets += Data.bLiveBullet ? 0 : 1;
+		const bool bIsLive = FMath::RandBool();
+		if (bIsLive && LiveBullets < NumLiveBullets)
+		{
+			Data.bLiveBullet = bIsLive;
+			++LiveBullets;
+		}
+		else
+		{
+			Data.bLiveBullet = false;
+			++DeadBullets;
+		}
 		
 		Bullets.Add(Data);
 	}
 
-	NetMulticastPostReload(LiveBullets, DeadBullets);
+	APumpkinGameModeBase* GameMode = GetWorld()->GetAuthGameMode<APumpkinGameModeBase>();
+	const FString Message = FString::Printf(TEXT("Live: %d, Blank: %d"), LiveBullets, DeadBullets); 
+	GameMode->RouteMessageToBothPlayers(Message);
 }
 
 void APumpkinGun::OnRep_BulletData()
@@ -135,21 +153,19 @@ void APumpkinGun::NetMulticastBulletFired_Implementation(bool bLiveBullet)
 	if (bLiveBullet)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FireParticles, MuzzleLocation->GetComponentLocation(), MuzzleLocation->GetComponentRotation());
 	}
 	if (!bLiveBullet)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, GunFireSoundBlank, GetActorLocation());
 	}
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, SmokeParticles, MuzzleLocation->GetComponentLocation(), MuzzleLocation->GetComponentRotation());
 }
 
 void APumpkinGun::NetMulticastBulletMisfired_Implementation()
 {
 	UGameplayStatics::PlaySoundAtLocation(this, MisfireSound, GetActorLocation());
-}
-
-void APumpkinGun::NetMulticastPostReload_Implementation(int32 LiveBullets, int32 DeadBullets)
-{
-	// @TODO: Show on screen how many live and dead bullets were reloaded
 }
 
 APawn* APumpkinGun::GetHoldingPawn_Implementation()

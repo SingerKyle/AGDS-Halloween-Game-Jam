@@ -6,6 +6,8 @@
 #include "Grippables/GrippableActor.h"
 #include "PumpkinGun.generated.h"
 
+class UNiagaraSystem;
+
 // @NOTE (Denis): This might not be required, but it could come in handy in the future
 USTRUCT(BlueprintType)
 struct FBulletData
@@ -37,13 +39,13 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ForceDropGun();
+
+	void ReloadGun();
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	void ReloadGun();
-
+	
 	UFUNCTION(Server, Reliable)
 	void ServerReloadGun();
 
@@ -52,9 +54,6 @@ protected:
 
 	UFUNCTION()
 	void OnRep_BulletData();
-
-	UFUNCTION(NetMulticast, Reliable)
-	void NetMulticastPostReload(int32 LiveBullets, int32 DeadBullets);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void NetMulticastBulletFired(bool bLiveBullet);
@@ -84,6 +83,19 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
 	TObjectPtr<USoundBase> GunFireSoundBlank;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
+	TObjectPtr<UNiagaraSystem> FireParticles;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GunConfig")
+	TObjectPtr<UNiagaraSystem> SmokeParticles;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> MuzzleLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> GunMesh;
+
 	
 private:
 

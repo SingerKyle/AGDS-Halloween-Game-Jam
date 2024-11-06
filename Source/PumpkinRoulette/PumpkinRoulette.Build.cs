@@ -8,7 +8,7 @@ public class PumpkinRoulette : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "VRExpansionPlugin", "GameplayTags" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "VRExpansionPlugin", "GameplayTags", "Niagara" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

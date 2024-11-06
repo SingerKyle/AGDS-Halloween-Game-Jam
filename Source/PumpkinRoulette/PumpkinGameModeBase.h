@@ -65,6 +65,8 @@ public:
 	APawn* GetOtherPlayer(const APawn* Player) const;
 
 	void SpawnCard();
+
+	void RouteMessageToBothPlayers(const FString& Message);
 	
 protected:
 
