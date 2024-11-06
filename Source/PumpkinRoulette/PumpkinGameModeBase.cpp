@@ -189,11 +189,11 @@ int32 APumpkinGameModeBase::RequestPlayerIndex(APawn* Pawn)
 	if (LastPlayerIndex == 1)
 	{
 		Pawn1 = Pawn;
+		SwitchTurn();
 	}
 	else
 	{
 		Pawn2 = Pawn;
-		SwitchTurn();
 	}
 	
 	return LastPlayerIndex;
