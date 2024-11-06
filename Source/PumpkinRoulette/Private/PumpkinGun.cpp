@@ -125,14 +125,12 @@ void APumpkinGun::ServerReloadGun_Implementation()
 		FBulletData Data;
 		Data.bLiveBullet = true;
 		Bullets.Add(Data);
-		LiveBullets++;
 	}
 	for (int32 Idx = 0; Idx < NumDeadBullets; ++Idx)
 	{
 		FBulletData Data;
 		Data.bLiveBullet = false;
 		Bullets.Add(Data);
-		DeadBullets++;x
 	}
 
 	FMath::SRandInit(FMath::Rand());
@@ -143,7 +141,7 @@ void APumpkinGun::ServerReloadGun_Implementation()
 	});
 
 	APumpkinGameModeBase* GameMode = GetWorld()->GetAuthGameMode<APumpkinGameModeBase>();
-	const FString Message = FString::Printf(TEXT("Live: %d, Blank: %d"), LiveBullets, DeadBullets); 
+	const FString Message = FString::Printf(TEXT("Live: %d, Blank: %d"), NumLiveBullets, NumDeadBullets); 
 	GameMode->RouteMessageToBothPlayers(Message);
 }
 
