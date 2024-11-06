@@ -31,7 +31,7 @@ void UPumpkinHealthComponent::ServerInstakill_Implementation()
 	// kill player instantly
 	PlayerHealth = 0;
 
-	OnRep_PlayerHealth(PlayerHealth);
+	OnRep_PlayerHealth();
 	if(PlayerHealth == 0)
 	{
 		// Player Lost
@@ -40,10 +40,9 @@ void UPumpkinHealthComponent::ServerInstakill_Implementation()
 
 void UPumpkinHealthComponent::ServerAdjustHealth_Implementation(int HealthChange)
 {
-	const int OldHealth = PlayerHealth;
 	PlayerHealth += HealthChange;
 	
-	OnRep_PlayerHealth(OldHealth);
+	OnRep_PlayerHealth();
 	if (PlayerHealth == 0)
 	{
 		// Player lost
@@ -64,7 +63,7 @@ void UPumpkinHealthComponent::BeginPlay()
 	
 }
 
-void UPumpkinHealthComponent::OnRep_PlayerHealth(int OldValue)
+void UPumpkinHealthComponent::OnRep_PlayerHealth()
 {
 	OnHealthChanged.Broadcast(PlayerHealth);
 }

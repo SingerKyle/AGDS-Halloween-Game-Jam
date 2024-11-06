@@ -33,7 +33,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-	void OnRep_PlayerHealth(int OldValue);
+	void OnRep_PlayerHealth();
 
 private:
 
