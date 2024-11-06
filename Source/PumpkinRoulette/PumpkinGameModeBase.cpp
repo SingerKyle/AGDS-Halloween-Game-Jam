@@ -85,8 +85,14 @@ void APumpkinGameModeBase::SwitchTurn()
     		Gun->SetActorRotation(FRotator(0.f, 0.f, 0.f));
     	}
     	CurrentGameState = EGameStates::Player1Turn;
-    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, FString("Your turn!"));
-    	IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Enemy turn!"));
+    	if (Pawn1)
+    	{
+    		IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn1, FString("Your turn!"));
+    	}
+    	if (Pawn2)
+    	{
+    		IPumpkinPlayerInterface::Execute_DisplayNotification(Pawn2, FString("Enemy turn!"));
+    	}
         break;
     }
 
@@ -174,7 +180,6 @@ bool APumpkinGameModeBase::IsPlayersTurn(APawn* HoldingPawn) const
 void APumpkinGameModeBase::RegisterGun(APumpkinGun* TheGun)
 {
 	Gun = TheGun;
-	SwitchTurn();
 }
 
 int32 APumpkinGameModeBase::RequestPlayerIndex(APawn* Pawn)
@@ -188,6 +193,7 @@ int32 APumpkinGameModeBase::RequestPlayerIndex(APawn* Pawn)
 	else
 	{
 		Pawn2 = Pawn;
+		SwitchTurn();
 	}
 	
 	return LastPlayerIndex;
