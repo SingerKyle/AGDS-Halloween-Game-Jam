@@ -281,7 +281,7 @@ void APumpkinGameModeBase::OnPlayerDead(APawn* Pawn)
 void APumpkinGameModeBase::StealCard(APawn* Pawn)
 {
 	TArray<APumpkinCardHolder*>& Target = Pawn == Pawn1 ? Player1CardHolders : Player2CardHolders;
-	TArray<APumpkinCardHolder*>& Owner = Pawn == Pawn1 ? Player2CardHolders : Player1CardHolders;
+	TArray<APumpkinCardHolder*>& OwnerArray = Pawn == Pawn1 ? Player2CardHolders : Player1CardHolders;
 
 	APumpkinCardHolder* TargetHolder = nullptr;
 	APumpkinCardHolder* OwnerHolder = nullptr;
@@ -295,7 +295,7 @@ void APumpkinGameModeBase::StealCard(APawn* Pawn)
 			break;
 		}
 	}
-	for(const auto Holder : Owner)
+	for(const auto Holder : OwnerArray)
 	{
 		if(!Holder->HasCard())
 		{
