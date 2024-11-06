@@ -31,4 +31,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ExplodeHead();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void DoJumpscare();
 };

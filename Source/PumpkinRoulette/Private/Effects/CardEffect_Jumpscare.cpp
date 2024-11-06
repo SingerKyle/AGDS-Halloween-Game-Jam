@@ -3,9 +3,12 @@
 
 #include "Effects/CardEffect_Jumpscare.h"
 
+#include "PumpkinPlayerInterface.h"
+
 void UCardEffect_Jumpscare::Execute(APawn* OwningPawn, APawn* TargetPawn)
 {
 	Super::Execute(OwningPawn, TargetPawn);
 
-	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Black, "JUMPSCARE");
+	IPumpkinPlayerInterface::Execute_DoJumpscare(TargetPawn);
+
 }

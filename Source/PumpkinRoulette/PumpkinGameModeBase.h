@@ -71,6 +71,8 @@ public:
 	void RouteMessageToBothPlayers(const FString& Message);
 	void OnPlayerDead(APawn* Pawn);
 
+	void StealCard(APawn* Pawn);
+
 protected:
 
 	UPROPERTY()

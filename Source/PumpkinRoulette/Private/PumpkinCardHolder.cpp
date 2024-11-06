@@ -31,6 +31,11 @@ bool APumpkinCardHolder::HasCard() const
 
 void APumpkinCardHolder::SetCard(APumpkinCard* NewCard)
 {
+	if(Card && NewCard == nullptr)
+	{
+		Card->OnCardPlayed.RemoveDynamic(this, &ThisClass::OnCardPlayed);
+	}
+	
 	Card = NewCard;
 	if (Card)
 	{

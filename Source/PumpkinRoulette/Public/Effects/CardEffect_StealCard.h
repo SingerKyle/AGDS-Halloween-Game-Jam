@@ -4,18 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "PumpkinCardEffect.h"
-#include "CardEffect_Jumpscare.generated.h"
+#include "CardEffect_StealCard.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PUMPKINROULETTE_API UCardEffect_Jumpscare : public UPumpkinCardEffect
+class PUMPKINROULETTE_API UCardEffect_StealCard : public UPumpkinCardEffect
 {
 	GENERATED_BODY()
-	
 public:
-	virtual void Execute(APawn* OwningPawn, APawn* TargetPawn) override;
-
 	
+	virtual void Execute(APawn* OwningPawn, APawn* TargetPawn) override;
 };

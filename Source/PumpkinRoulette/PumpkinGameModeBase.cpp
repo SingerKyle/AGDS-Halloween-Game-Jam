@@ -278,6 +278,44 @@ void APumpkinGameModeBase::OnPlayerDead(APawn* Pawn)
 	CurrentGameState = EGameStates::GameEnd;
 }
 
+void APumpkinGameModeBase::StealCard(APawn* Pawn)
+{
+	TArray<APumpkinCardHolder*>& Target = Pawn == Pawn1 ? Player1CardHolders : Player2CardHolders;
+	TArray<APumpkinCardHolder*>& Owner = Pawn == Pawn1 ? Player2CardHolders : Player1CardHolders;
+
+	APumpkinCardHolder* TargetHolder = nullptr;
+	APumpkinCardHolder* OwnerHolder = nullptr;
+
+	
+	for(const auto Holder : Target)
+	{
+		if(Holder->HasCard())
+		{
+			TargetHolder = Holder;
+			break;
+		}
+	}
+	for(const auto Holder : Owner)
+	{
+		if(!Holder->HasCard())
+		{
+			OwnerHolder = Holder;
+			break;
+		}
+	}
+
+	if(!TargetHolder || !OwnerHolder)
+	{
+		return;
+	}
+	
+	APumpkinCard* Card = TargetHolder->Card;
+	TargetHolder->SetCard(nullptr);
+	OwnerHolder->SetCard(Card);
+	Card->SetCardSlotLocation(OwnerHolder->GetActorTransform());
+	
+}
+
 APumpkinCardHolder* APumpkinGameModeBase::TryFindFreeCardHolder(const TArray<APumpkinCardHolder*>& CardHolders) const
 {
 	for (const auto& CardHolder : CardHolders)
