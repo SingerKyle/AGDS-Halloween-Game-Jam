@@ -189,10 +189,12 @@ int32 APumpkinGameModeBase::RequestPlayerIndex(APawn* Pawn)
 	if (LastPlayerIndex == 1)
 	{
 		Pawn1 = Pawn;
+		UE_LOG(LogTemp, Error, TEXT("Pawn1 Joined"));
 		SwitchTurn();
 	}
 	else
 	{
+		UE_LOG(LogTemp, Error, TEXT("Pawn2 Joined"));
 		Pawn2 = Pawn;
 	}
 	
